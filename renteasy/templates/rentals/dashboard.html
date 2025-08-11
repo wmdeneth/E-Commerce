@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>My Bookings - RentEasy</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <header class="container">
+    <h1>My Bookings</h1>
+    <nav>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'vehicle_list' %}">Vehicles</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Vehicle</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td><a href="{% url 'vehicle_detail' b.vehicle.pk %}">{{ b.vehicle.brand }} {{ b.vehicle.name }}</a></td>
+          <td>{{ b.start_date }}</td>
+          <td>{{ b.end_date }}</td>
+          <td>${{ b.total_amount }}</td>
+          <td>{{ b.status|title }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No bookings yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Vehicles - RentEasy</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <header class="container">
+    <h1>Vehicles</h1>
+    <nav>
+      <a href="{% url 'home' %}">Home</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">My Bookings</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="container">
+    <form method="get" class="search">
+      <input type="text" name="q" placeholder="Search vehicles" value="{{ query }}" />
+      <button class="btn" type="submit">Search</button>
+    </form>
+
+    <section class="grid">
+      {% for v in vehicles %}
+      <article class="card">
+        <h3>{{ v.brand }} {{ v.name }}</h3>
+        <p>{{ v.vehicle_type }} • {{ v.year }}</p>
+        <p><strong>${{ v.daily_rate }}</strong> / day</p>
+        <a class="btn" href="{% url 'vehicle_detail' v.pk %}">View</a>
+      </article>
+      {% empty %}
+      <p>No vehicles match your search.</p>
+      {% endfor %}
+    </section>
+  </main>
+</body>
+</html>

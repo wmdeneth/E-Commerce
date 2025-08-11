@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{{ vehicle.brand }} {{ vehicle.name }} - RentEasy</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <header class="container">
+    <a href="{% url 'vehicle_list' %}">← Back to Vehicles</a>
+  </header>
+
+  <main class="container">
+    <h1>{{ vehicle.brand }} {{ vehicle.name }}</h1>
+    <p>{{ vehicle.vehicle_type }} • {{ vehicle.year }} • {{ vehicle.transmission|title }} • {{ vehicle.fuel_type|title }}</p>
+
+    <div class="gallery">
+      {% for img in vehicle.images.all %}
+        <img src="{{ img.image.url }}" alt="{{ vehicle.name }} image" />
+      {% empty %}
+        <div class="placeholder">No images</div>
+      {% endfor %}
+    </div>
+
+    <div class="columns">
+      <section>
+        <h3>Features</h3>
+        <ul>
+          {% for f in vehicle.features.all %}
+            <li>{{ f.name }}</li>
+          {% empty %}
+            <li>Standard features</li>
+          {% endfor %}
+        </ul>
+        <p>{{ vehicle.description }}</p>
+      </section>
+
+      <aside class="card">
+        <h3>Pricing</h3>
+        <p>Daily Rate: <strong>${{ vehicle.daily_rate }}</strong></p>
+        <p>Weekly Rate: ${{ vehicle.weekly_rate }}</p>
+        <p>Monthly Rate: ${{ vehicle.monthly_rate }}</p>
+        <hr />
+        <h3>Book this vehicle</h3>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'book_vehicle' vehicle.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn" type="submit">Book Now</button>
+          </form>
+        {% else %}
+          <p>Please <a href="{% url 'login' %}?next={{ request.path }}">login</a> to book.</p>
+        {% endif %}
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

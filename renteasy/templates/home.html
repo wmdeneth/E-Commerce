@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>RentEasy - Home</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <header class="container">
+    <h1>RentEasy</h1>
+    <nav>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'vehicle_list' %}">Vehicles</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">My Bookings</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>Your Journey Begins Here</h2>
+    <p>Find the perfect vehicle for your next adventure.</p>
+
+    <section class="grid">
+      {% for v in vehicles %}
+      <article class="card">
+        <h3>{{ v.brand }} {{ v.name }}</h3>
+        <p>{{ v.vehicle_type }} • {{ v.year }} • Seats {{ v.seating_capacity }}</p>
+        <p><strong>${{ v.daily_rate }}</strong> / day</p>
+        <a class="btn" href="{% url 'vehicle_detail' v.pk %}">View</a>
+      </article>
+      {% empty %}
+      <p>No vehicles yet.</p>
+      {% endfor %}
+    </section>
+  </main>
+
+  <footer class="container small">© RentEasy</footer>
+</body>
+</html>

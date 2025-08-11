@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Login - RentEasy</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <main class="container narrow">
+    <h2>Welcome back</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+    <p class="small">No account? <a href="{% url 'register' %}">Register</a></p>
+  </main>
+</body>
+</html>
